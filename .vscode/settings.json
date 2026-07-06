@@ -3,5 +3,20 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
-  }
+  },
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "textClass",
+    "titleClass",
+    "containerClass",
+    "btnClass",
+    "iconClass"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    [
+      "(?:textClass|titleClass|containerClass|btnClass|iconClass)\\s*=\\s*[\"']([^\"']*)[\"']",
+      "([a-zA-Z0-9\\-:/%.]+)"
+    ]
+  ]
 }
