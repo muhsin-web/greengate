@@ -1,0 +1,52 @@
+[
+  {
+    "id": "1",
+    "name": "access bank",
+    "img_name": "access.png"
+  },
+  {
+    "id": "2",
+    "name": "carbon bank",
+    "img_name": "carbon.png"
+  },
+  {
+    "id": "3",
+    "name": "fidelity bank",
+    "img_name": "fidelity.png"
+  },
+  {
+    "id": "4",
+    "name": "first bank",
+    "img_name": "first-bank.jpg"
+  },
+  {
+    "id": "5",
+    "name": "gt bank",
+    "img_name": "gt-bank.png"
+  },
+  {
+    "id": "6",
+    "name": "keystone bank",
+    "img_name": "keystone.png"
+  },
+  {
+    "id": "7",
+    "name": "kuda bank",
+    "img_name": "kuda.jpg"
+  },
+  {
+    "id": "8",
+    "name": "moniepoint MFB",
+    "img_name": "moniepoint.jpg"
+  },
+  {
+    "id": "9",
+    "name": "uba bank",
+    "img_name": "uba.jpg"
+  },
+  {
+    "id": "10",
+    "name": "zenith bank",
+    "img_name": "zenith.png"
+  }
+]

@@ -9,7 +9,11 @@ import OtpInput from "../ui/OtpInput";
 
 interface VerificationScreenCardProps {
   title: string;
-  type: "LOGIN" | "RESET_PASSWORD" | "CREATE_ACCOUNT";
+  type:
+    | "LOGIN"
+    | "RESET_PASSWORD"
+    | "CREATE_ACCOUNT"
+    | "AUTHENTICATED_RESET_PASSWORD";
   onProceed?: () => void;
 }
 

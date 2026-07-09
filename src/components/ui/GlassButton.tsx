@@ -2,7 +2,7 @@
 import { cn } from "@/libs/cn";
 import { GlassView, isLiquidGlassAvailable } from "expo-glass-effect";
 import React from "react";
-import { Pressable, Text } from "react-native";
+import { Pressable, Text, ViewStyle } from "react-native";
 
 type GlassButtonProps = {
   title?: string;
@@ -10,6 +10,7 @@ type GlassButtonProps = {
   className?: string;
   textClass?: string;
   children?: React.ReactNode;
+  style?: ViewStyle;
 };
 
 export function GlassButton({
@@ -18,8 +19,9 @@ export function GlassButton({
   className,
   textClass,
   children,
+  style,
 }: GlassButtonProps) {
-  console.log(isLiquidGlassAvailable());
+  console.log(className);
   if (!isLiquidGlassAvailable()) {
     // Fallback for iOS < 26, Android, and web
     return (
@@ -29,9 +31,10 @@ export function GlassButton({
           shadowOpacity: 1,
           shadowColor: "#0000001A",
           shadowRadius: 12,
+          backgroundColor: "red",
         }}
         className={cn(
-          "p-3 justify-center w-fit items-center rounded-full bg-[#FFFFFF99] self-start",
+          "p-3 justify-center w-fit items-center rounded-full bg-red-300 self-start",
           className,
         )}
       >
@@ -55,8 +58,13 @@ export function GlassButton({
     <GlassView
       isInteractive
       glassEffectStyle={{ style: "regular" }}
-      style={{ borderRadius: 999, height: 40, width: 40 }}
-      className={cn("h-10 w-12 px-6", className)}
+      style={[
+        {
+          borderRadius: 999,
+          padding: 12,
+        },
+        style,
+      ]}
     >
       <Pressable
         onPress={onPress}

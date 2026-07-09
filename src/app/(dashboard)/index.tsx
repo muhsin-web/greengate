@@ -21,6 +21,7 @@ const Screen = () => {
       </View>
       <Button
         title="Continue"
+        disabled={pin.length < 4}
         onPress={() => router.replace("/(dashboard)/tabs")}
         btnClass="!bg-secondary"
         textClass="!text-primary"

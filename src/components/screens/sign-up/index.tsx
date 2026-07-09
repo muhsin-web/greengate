@@ -21,8 +21,8 @@ const SignupScreen = () => {
             placeholder="Enter email address"
             info={"Use an email you have access to"}
           />
-          <Input placeholder="Enter password" />
-          <Input placeholder="Confirm password" />
+          <Input isPassword placeholder="Enter password" />
+          <Input isPassword placeholder="Confirm password" />
         </View>
       </ScrollView>
 

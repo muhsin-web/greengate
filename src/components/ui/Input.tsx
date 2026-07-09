@@ -17,23 +17,26 @@ interface InputProps extends TextInputProps {
   error?: string;
   success?: string;
   isPassword?: boolean;
+  leading?: React.ReactNode;
 }
 
-const Input = ({ label, isPassword, ...rest }: InputProps) => {
-  const [isvisible, setVisible] = React.useState(false);
+const Input = ({ leading, label, isPassword, ...rest }: InputProps) => {
+  const [isvisible, setVisible] = React.useState(true);
   return (
     <View>
       {label && <Text>Input</Text>}
       <View
         className={cn(
-          "flex-row items-center border bg-primary-accent-light h-14 rounded-full px-4 py-1 border-border-stroke",
+          "flex-row items-center border bg-primary-accent-light h-16 rounded-full px-4 py-1 border-border-stroke",
         )}
       >
         <TextInput
           className="h-full bg-transparent flex-1 px-2 font-sans"
           secureTextEntry={isPassword && isvisible}
+          placeholderTextColor={"#999999"}
           {...rest}
         />
+        {leading && leading}
         {isPassword && (
           <Pressable onPress={() => setVisible(!isvisible)}>
             {!isvisible ? <EyeOpenIcon /> : <EyeOffIcon />}

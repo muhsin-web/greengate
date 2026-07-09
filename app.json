@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/images/app-logo/greengate-logo.png",
-      "bundleIdentifier": "com.falconpay.greengate"
+      "bundleIdentifier": "com.falconpay.greengate",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Greengate accesses your photos to let you upload a profile picture."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +22,11 @@
         "monochromeImage": "./assets/images/app-logo/greengate-logo.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.falconpay.greengate"
+      "package": "com.falconpay.greengate",
+      "permissions": [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT"
+      ]
     },
     "web": {
       "output": "static",
@@ -55,7 +62,7 @@
         "expo-status-bar",
         {
           "hidden": false,
-          "style": "light"
+          "style": "dark"
         }
       ],
       "expo-web-browser",
@@ -65,11 +72,42 @@
         {
           "faceIDPermission": "Allow Greengate to use Face ID."
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Greengate to access your camera",
+          "barcodeScannerEnabled": true
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends.",
+          "colors": {
+            "cropToolbarColor": "#000000"
+          },
+          "dark": {
+            "colors": {
+              "cropToolbarColor": "#000000"
+            }
+          }
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "expo-status-bar": {
+        "style": "dark",
+        "hidden": false
+      },
+      "eas": {
+        "projectId": "0ddc396d-e69e-4241-952c-c394eab96603"
+      }
     }
   }
 }

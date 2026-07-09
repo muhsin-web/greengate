@@ -44,3 +44,7 @@ export const useUserStore = create<UserStore>()(
 export const authenticateUser = () => {
   useUserStore.setState((state) => ({ isAuthenticated: true }));
 };
+
+export const logoutUser = () => {
+  useUserStore.setState((state) => ({ isAuthenticated: false }));
+};

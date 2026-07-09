@@ -2,14 +2,23 @@
 import { cn } from "@/libs/cn";
 import { BlurView } from "expo-blur";
 import { Tabs } from "expo-router";
-import { Pressable, Text, View } from "react-native";
+import { Platform, Pressable, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function FloatingTabBar({ state, descriptors, navigation }: any) {
+  const insets = useSafeAreaInsets();
   return (
-    <View className="absolute bottom-6 overflow-hidden bg-transparent border border-[#0000001A] left-4 right-4 rounded-full">
+    <View
+      style={{
+        bottom: Platform.select({
+          ios: insets.bottom,
+          android: insets.bottom + 10,
+        }),
+      }}
+      className="absolute bottom-6 overflow-hidden bg-transparent border border-[#0000001A] left-4 right-4 rounded-full"
+    >
       <BlurView
-        intensity={15}
-        blurMethod="dimezisBlurView"
+        intensity={Platform.select({ ios: 15, android: 120 })}
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
@@ -33,7 +42,7 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
                 isFocused && "flex-[1.5] bg-[#00000014]",
               )}
             >
-              {options.tabBarIcon?.({ focused: isFocused })}
+              {/* {options.tabBarIcon?.({ focused: isFocused })} */}
               <Text
                 className={cn(
                   "text-xs font-sans-medium mt-1",
@@ -52,11 +61,38 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
 
 export default function FloatingTabLayout() {
   return (
-    <Tabs tabBar={(props) => <FloatingTabBar {...props} />}>
-      <Tabs.Screen name="index" options={{ title: "Home" }} />
-      <Tabs.Screen name="wallet" options={{ title: "Wallet" }} />
-      <Tabs.Screen name="swap" options={{ title: "Swap" }} />
-      <Tabs.Screen name="settings" options={{ title: "Settings" }} />
+    <Tabs
+      screenOptions={{ headerShown: false }}
+      tabBar={(props) => <FloatingTabBar {...props} />}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "Home",
+          tabBarIcon: require("@/assets/images/tabIcons/house.png"),
+        }}
+      />
+      <Tabs.Screen
+        name="wallet"
+        options={{
+          title: "Wallet",
+          tabBarIcon: require("@/assets/images/tabIcons/cardholder.png"),
+        }}
+      />
+      <Tabs.Screen
+        name="swap"
+        options={{
+          title: "Swap",
+          tabBarIcon: require("@/assets/images/tabIcons/swap.png"),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          tabBarIcon: require("@/assets/images/tabIcons/gear.png"),
+        }}
+      />
     </Tabs>
   );
 }
