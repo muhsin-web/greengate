@@ -1,3 +1,4 @@
+import { AuthUser } from "@/api";
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 import { createJSONStorage, persist, StateStorage } from "zustand/middleware";
@@ -5,7 +6,8 @@ import { createJSONStorage, persist, StateStorage } from "zustand/middleware";
 type UserStoreState = {
   isAuthenticated: boolean;
   hasHydrated: boolean;
-  user: any;
+  hasOnboarded: boolean;
+  user: AuthUser | null;
 };
 
 type PositionStoreActions = {};
@@ -29,6 +31,7 @@ export const useUserStore = create<UserStore>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
+      hasOnboarded: false,
       hasHydrated: false,
     }),
     {
@@ -41,8 +44,12 @@ export const useUserStore = create<UserStore>()(
   ),
 );
 
-export const authenticateUser = () => {
-  useUserStore.setState((state) => ({ isAuthenticated: true }));
+export const authenticateUser = (user?: any) => {
+  useUserStore.setState((state) => ({ isAuthenticated: true, user }));
+};
+
+export const onboardUser = () => {
+  useUserStore.setState((state) => ({ hasOnboarded: true }));
 };
 
 export const logoutUser = () => {

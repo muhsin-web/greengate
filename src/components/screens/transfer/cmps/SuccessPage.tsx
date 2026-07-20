@@ -1,17 +1,28 @@
+import Button from "@/components/ui/Button";
 import { formatAmountDisplay } from "@/utils/format-currency";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("screen");
-const SuccessPage = ({ type }: { type: "bank" | "user" }) => {
+const SuccessPage = ({
+  type,
+  details,
+}: {
+  type: "bank" | "user" | "buy_fiat" | "send_crypto";
+  details?: any;
+}) => {
   const amount = "14000.21";
+  const insets = useSafeAreaInsets();
 
   return (
     <SafeAreaView className="flex-1 bg-white px-4">
       <View className="flex-1 justify-end">
-        <View className="flex-[0.6] justify-between">
+        <View className="justify-between">
           <View>
             <View className="justify-center items-center mb-4">
               <Image
@@ -33,27 +44,66 @@ const SuccessPage = ({ type }: { type: "bank" | "user" }) => {
             </View>
           </View>
 
-          <View className="flex-row gap-2">
-            <Pressable
-              onPress={() =>
-                router.navigate({
-                  pathname: "/(dashboard)/transfer/receipt",
-                  params: {
-                    type,
-                  },
-                })
-              }
-              className="bg-[#F6F6F6] items-center flex-1 rounded-full py-5"
-            >
-              <Text className="font-sans text-secondary">Receipt</Text>
-            </Pressable>
-            <Pressable
+          {type == "buy_fiat" && (
+            <View className="gap-1 mt-4">
+              <InfoRow label="Rate" value={"₦1,650 / $1"} />
+              <InfoRow label="You paid" value={"₦412,500.00"} />
+              <InfoRow label="Recipient" value={details?.accountName} />
+              <InfoRow label="Reference" value={"GG-USD-9973"} />
+            </View>
+          )}
+
+          {type == "send_crypto" && (
+            <View className="mb-10">
+              <View className="gap-1 mt-4">
+                <InfoRow label="To" value={details?.address} />
+                <InfoRow label="Network fee" value={"₦412,500.00"} />
+              </View>
+              <View className="bg-[#D6FED6] p-4 rounded-xl mt-4">
+                <Text className="text-[#006E1A] font-sans text-sm">
+                  301.00 XLM has been broadcast to the Stellar network. Usually
+                  under 10 seconds.
+                </Text>
+              </View>
+            </View>
+          )}
+
+          {type == "send_crypto" ? (
+            <Button
+              style={{ marginVertical: insets.bottom }}
+              title="Done"
+              type="secondary"
               onPress={() => router.dismissTo("/(dashboard)/tabs")}
-              className="bg-[#F6F6F6] items-center flex-1 rounded-full py-5"
+            />
+          ) : (
+            <View
+              style={{ marginVertical: insets.bottom }}
+              className="flex-row gap-2"
             >
-              <Text className="font-sans text-secondary">Home</Text>
-            </Pressable>
-          </View>
+              <Pressable
+                onPress={() =>
+                  router.navigate({
+                    pathname:
+                      type == "buy_fiat"
+                        ? "/wallets/trade-fiat/receipt"
+                        : "/(dashboard)/transfer/receipt",
+                    params: {
+                      type,
+                    },
+                  })
+                }
+                className="bg-[#F6F6F6] items-center flex-1 rounded-full py-5"
+              >
+                <Text className="font-sans text-secondary">Receipt</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => router.dismissTo("/(dashboard)/tabs")}
+                className="bg-[#F6F6F6] items-center flex-1 rounded-full py-5"
+              >
+                <Text className="font-sans text-secondary">Home</Text>
+              </Pressable>
+            </View>
+          )}
         </View>
       </View>
     </SafeAreaView>
@@ -63,3 +113,14 @@ const SuccessPage = ({ type }: { type: "bank" | "user" }) => {
 export default SuccessPage;
 
 const styles = StyleSheet.create({});
+
+const InfoRow = ({ label, value }: { label: string; value: string }) => {
+  return (
+    <View className="p-4 rounded-full flex-row items-center justify-between gap-3 bg-[#F6F6F6]">
+      <View className="flex-1">
+        <Text className="font-sans text-sm text-secondary-text">{label}</Text>
+      </View>
+      <Text className="text-secondary font-sans-medium text-sm">{value}</Text>
+    </View>
+  );
+};

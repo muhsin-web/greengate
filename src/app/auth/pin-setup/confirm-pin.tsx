@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 
 const Screen = () => {
   const { pin } = useLocalSearchParams<{ pin: string }>();
-  return <ConfirmPinScreen pin={pin} />;
+  return <ConfirmPinScreen type="guest" pin={pin} />;
 };
 
 export default Screen;

@@ -1,5 +1,11 @@
 import { cn } from "@/libs/cn";
-import { Pressable, PressableProps, StyleSheet, Text } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  PressableProps,
+  StyleSheet,
+  Text,
+} from "react-native";
 
 interface ButtonProps extends PressableProps {
   title?: string;
@@ -13,6 +19,7 @@ interface ButtonProps extends PressableProps {
   };
   addBottomGap?: boolean;
   disabled?: boolean;
+  loading?: boolean;
 }
 
 const Button = ({
@@ -23,13 +30,14 @@ const Button = ({
   type = "primary",
   title,
   disabled,
+  loading,
   addBottomGap = true,
   ...rest
 }: ButtonProps) => {
   return (
     <Pressable
       className={cn(
-        "h-14 justify-center items-center rounded-full",
+        "h-16 justify-center items-center rounded-full",
         btnClass && btnClass,
         addBottomGap && "mb-2",
         type == "primary" && "bg-primary",
@@ -40,17 +48,23 @@ const Button = ({
     >
       {icon?.left && icon?.left}
       {title ? (
-        <Text
-          className={cn(
-            "font-sans text-base",
-            textClass,
-            type == "primary" && "text-secondary",
-            type == "secondary" && "text-primary",
-            disabled && "!text-secondary-text",
+        <>
+          {loading ? (
+            <ActivityIndicator size={"small"} color={"#fff"} />
+          ) : (
+            <Text
+              className={cn(
+                "font-sans text-base",
+                textClass,
+                type == "primary" && "text-secondary",
+                type == "secondary" && "text-primary",
+                disabled && "!text-secondary-text",
+              )}
+            >
+              {title || "Button"}
+            </Text>
           )}
-        >
-          {title || "Button"}
-        </Text>
+        </>
       ) : (
         children
       )}

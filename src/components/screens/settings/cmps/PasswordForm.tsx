@@ -1,6 +1,8 @@
+import { useResetPassword } from "@/api";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { cn } from "@/libs/cn";
+import { router } from "expo-router";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 // import MaterialCommunityIcons from '@expo/';
@@ -23,8 +25,12 @@ const PasswordForm = ({
   title = "Create a new password to keep your account secure",
   onContinue,
   type = "new",
+  email,
+  otp,
 }: {
   title?: string;
+  otp?: string;
+  email?: string;
   type?: "new" | "reset";
   onContinue: (data: { password: string; confirmPassword: string }) => void;
 }) => {
@@ -36,9 +42,28 @@ const PasswordForm = ({
     passed: rule.test(password),
   }));
 
+  console.log(email, otp);
   const allRulesPassed = ruleResults.every((r) => r.passed);
   const passwordsMatch = password.length > 0 && password === confirmPassword;
   const canContinue = allRulesPassed && passwordsMatch;
+
+  const resetPassword = useResetPassword();
+
+  const handleReset = () => {
+    if (!otp || !email) return;
+    resetPassword.mutate(
+      {
+        code: otp,
+        email,
+        newPassword: password,
+      },
+      {
+        onSuccess(data, variables, onMutateResult, context) {
+          router.back();
+        },
+      },
+    );
+  };
 
   return (
     <View className="flex-1">
@@ -75,7 +100,13 @@ const PasswordForm = ({
           />
         </View>
       </ScrollView>
-      <Button type="secondary" title="Continue" />
+      <Button
+        disabled={!canContinue || resetPassword.isPending}
+        onPress={handleReset}
+        loading={resetPassword.isPending}
+        type="secondary"
+        title="Continue"
+      />
     </View>
   );
 };

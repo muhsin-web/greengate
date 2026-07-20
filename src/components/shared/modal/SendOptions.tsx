@@ -9,7 +9,7 @@ const SendOptions = () => {
   const hideModal = useModalStore((s) => s.hideModal);
   return (
     <ModalWrapper title={"Send to"}>
-      <View className="gap-1">
+      <View className="gap-1 mt-5">
         <Pressable
           onPress={() => {
             hideModal();

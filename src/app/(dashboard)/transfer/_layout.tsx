@@ -16,12 +16,14 @@ const TransferLayout = () => {
         name="transfer-summary"
         options={{
           presentation: "containedTransparentModal",
+          animation: "slide_from_bottom",
         }}
       />
       <Stack.Screen
         name="banks"
         options={{
           presentation: "pageSheet",
+          animation: "slide_from_bottom",
         }}
       />
       <Stack.Screen

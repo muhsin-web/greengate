@@ -1,6 +1,6 @@
 import Button from "@/components/ui/Button";
 import HeaderBar from "@/components/ui/HeaderBar";
-import KeyPad from "@/components/ui/KeyPad";
+import PinKeypad from "@/components/ui/PinKeypad";
 import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -17,7 +17,7 @@ const Screen = () => {
         </Text>
       </View>
       <View className="flex-1 justify-end">
-        <KeyPad value={pin} onChange={(e) => setPin(e)} />
+        <PinKeypad value={pin} onChange={(e) => setPin(e)} />
       </View>
       <Button
         title="Continue"

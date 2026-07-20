@@ -1,11 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
+import WalletsScreen from "@/components/screens/wallets";
+import { StyleSheet } from "react-native";
 
 const Screen = () => {
-  return (
-    <View>
-      <Text>Screen</Text>
-    </View>
-  );
+  return <WalletsScreen />;
 };
 
 export default Screen;

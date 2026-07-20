@@ -1,13 +1,29 @@
+import { AssetType } from "@/components/shared/modal/SwapAssetsModal";
 import { create } from "zustand";
 
 export type ModalType =
-  "send_options" | "trxn_pin_modal" | "theme_picker" | "logout_modal";
+  | "send_options"
+  | "trxn_pin_modal"
+  | "theme_picker"
+  | "logout_modal"
+  | "swap_assest_picker"
+  | "statement_modal"
+  | "sell_fiat_ref";
 
 export type ModalPayloads = {
-  send_options: undefined;
-  logout_modal: undefined;
+  statement_modal: {
+    title?: string;
+  };
   premium_swap: {
     wallet_id?: string;
+  };
+  swap_review: {
+    from: AssetType;
+    to: AssetType;
+    amount: string;
+  };
+  swap_assest_picker: {
+    selected?: AssetType | null;
   };
   completed_message: {
     title?: string;
@@ -17,11 +33,14 @@ export type ModalPayloads = {
     desc?: string;
     title?: string;
   };
+  sell_fiat_ref: undefined;
   theme_picker: undefined;
+  send_options: undefined;
+  logout_modal: undefined;
 };
 
 type ModalActions = {
-  onConfirm?: (e?: string) => void;
+  onConfirm?: (e?: string | any) => void;
   onCancel?: () => void;
   onClose?: () => void;
 };

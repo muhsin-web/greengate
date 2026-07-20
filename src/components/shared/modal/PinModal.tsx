@@ -1,4 +1,3 @@
-import HeaderBar from "@/components/ui/HeaderBar";
 import PinKeypad from "@/components/ui/PinKeypad";
 import { useModalStore } from "@/store/modal.store";
 import React from "react";
@@ -18,8 +17,7 @@ const PinModal = () => {
     }
   }, [pin]);
   return (
-    <ModalWrapper>
-      <HeaderBar forceShowBackBtn title="Enter Pin" />
+    <ModalWrapper title="Enter pin">
       <View style={{ height: height * 0.7, justifyContent: "flex-end" }}>
         <View>
           <PinKeypad onChange={(e) => setPin(e)} value={pin} />

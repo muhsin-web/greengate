@@ -4,9 +4,13 @@ import { StyleSheet, Text, View } from "react-native";
 const CountDown = ({
   className,
   count,
+  onPress,
+  isLoading,
 }: {
   className?: string;
   count: number;
+  isLoading: boolean;
+  onPress: () => void;
 }) => {
   const format = () => {
     const min = Math.floor(count / 60);
@@ -19,12 +23,14 @@ const CountDown = ({
       <Text className="font-sans text-primary-text">
         Didn’t get it?{" "}
         <Text
+          disabled={isLoading}
+          onPress={onPress}
           className={cn(
             "text-[#AA9F9F] underline",
             count == 0 && "text-[#0DAE2B]",
           )}
         >
-          Request OTP
+          {isLoading ? "resending..." : "Request OTP"}
         </Text>{" "}
         {count > 0 && `in ${format()}`}
       </Text>

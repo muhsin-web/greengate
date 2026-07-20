@@ -27,14 +27,18 @@ export function GlassButton({
     return (
       <Pressable
         onPress={onPress}
-        style={{
-          shadowOpacity: 1,
-          shadowColor: "#0000001A",
-          shadowRadius: 12,
-          backgroundColor: "red",
-        }}
+        style={[
+          {
+            shadowOpacity: 1,
+            shadowColor: "#000000a7",
+            shadowRadius: 22,
+            shadowOffset: { height: 20, width: 12 },
+            elevation: 10,
+          },
+          style,
+        ]}
         className={cn(
-          "p-3 justify-center w-fit items-center rounded-full bg-red-300 self-start",
+          "p-3 justify-center w-fit items-center rounded-full bg-white/60 border border-white self-start",
           className,
         )}
       >

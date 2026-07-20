@@ -1,6 +1,8 @@
+import { useForgotPassword } from "@/api";
 import Button from "@/components/ui/Button";
 import HeaderBar from "@/components/ui/HeaderBar";
 import Input from "@/components/ui/Input";
+import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,14 +11,29 @@ const ForgotPasswordScreen = ({
   onContinue,
 }: {
   type: "auth_user" | "visitor";
-  onContinue?: () => void;
+  onContinue?: (e: string) => void;
 }) => {
+  const forgotPassword = useForgotPassword();
+  const [email, setEmail] = React.useState("");
+
+  const handleSubmit = () => {
+    forgotPassword.mutate(
+      { email },
+      {
+        onSuccess(data, variables, onMutateResult, context) {
+          onContinue!(email);
+        },
+      },
+    );
+  };
   return (
     <SafeAreaView className="flex-1 bg-primary-foreground px-4">
       <HeaderBar title="Reset password" />
 
       <ScrollView className="pt-6">
         <Input
+          value={email}
+          onChangeText={setEmail}
           placeholder="Enter email address"
           info="Use the email linked to your account"
         />
@@ -30,9 +47,11 @@ const ForgotPasswordScreen = ({
 
       <Button
         title="Send code"
-        onPress={onContinue}
+        disabled={forgotPassword.isPending || !email}
+        onPress={handleSubmit}
         textClass="!text-primary"
         btnClass="!bg-secondary"
+        loading={forgotPassword.isPending}
       />
     </SafeAreaView>
   );

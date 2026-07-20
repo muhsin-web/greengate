@@ -4,7 +4,7 @@ import Button from "@/components/ui/Button";
 import HeaderBar from "@/components/ui/HeaderBar";
 import Input from "@/components/ui/Input";
 import { router } from "expo-router";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const TransferScreen = () => {
@@ -15,7 +15,8 @@ const TransferScreen = () => {
       <ScrollView className="mt-4" showsVerticalScrollIndicator={false}>
         <View className="gap-4">
           <Input
-            editable={false}
+            editable={Platform.select({ android: true, ios: false })}
+            onFocus={() => router.navigate("/(dashboard)/transfer/banks")}
             onPress={() => router.navigate("/(dashboard)/transfer/banks")}
             placeholder="Select bank"
             leading={<ChevDownIcon />}

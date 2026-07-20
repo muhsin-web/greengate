@@ -1,4 +1,4 @@
-import { ArrowLeftIcon } from "@/assets/svgs/ArrowLeftIcon";
+import { ArrowRightIcon } from "@/assets/svgs/ArrowRightIcon";
 import BottomSpacer from "@/components/shared/BottomSpacer";
 import Button from "@/components/ui/Button";
 import { useModal } from "@/hooks/useModal";
@@ -23,14 +23,14 @@ const DashboardScreen = () => {
             addBottomGap={false}
             btnClass="!bg-secondary flex-1"
             textClass="!text-primary !font-sans-medium"
-          />
-          <Button
-            title="Receive"
-            addBottomGap={false}
             onPress={() => {
               console.log("clicked");
               showModal("send_options");
             }}
+          />
+          <Button
+            title="Receive"
+            addBottomGap={false}
             btnClass="!bg-secondary flex-1"
             textClass="!text-primary !font-sans-medium"
           />
@@ -55,7 +55,7 @@ const DashboardScreen = () => {
                 </Text>
               </View>
               <Button btnClass="!w-10 !h-10 rounded-full !bg-[#E9E9E9]">
-                <ArrowLeftIcon />
+                <ArrowRightIcon />
               </Button>
             </View>
           </View>

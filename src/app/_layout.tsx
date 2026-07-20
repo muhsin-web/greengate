@@ -1,5 +1,6 @@
 import "@/libs/cssInterop";
 import { useUserStore } from "@/store/user.store";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React from "react";
@@ -21,16 +22,27 @@ export default function RootLayout() {
     return null;
   }
 
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 1,
+        refetchOnWindowFocus: true, // good default for balances/rates
+      },
+    },
+  });
+
   return (
     <SafeAreaProvider>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Protected guard={isAuthenticated}>
-          <Stack.Screen name="(dashboard)" />
-        </Stack.Protected>
-        <Stack.Protected guard={!isAuthenticated}>
-          <Stack.Screen name="auth" />
-        </Stack.Protected>
-      </Stack>
+      <QueryClientProvider client={queryClient}>
+        <Stack screenOptions={{ headerShown: false, gestureEnabled: false }}>
+          <Stack.Protected guard={isAuthenticated}>
+            <Stack.Screen name="(dashboard)" />
+          </Stack.Protected>
+          <Stack.Protected guard={!isAuthenticated}>
+            <Stack.Screen name="auth" />
+          </Stack.Protected>
+        </Stack>
+      </QueryClientProvider>
     </SafeAreaProvider>
   );
 }

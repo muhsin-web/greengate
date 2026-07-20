@@ -3,6 +3,7 @@ import { useModalStore } from "@/store/modal.store";
 import { BlurView } from "expo-blur";
 import React from "react";
 import {
+  BackHandler,
   Dimensions,
   Platform,
   Pressable,
@@ -34,13 +35,24 @@ const ModalWrapper = ({
   const type = useModalStore((s) => s.type);
   const insets = useSafeAreaInsets();
   const [ready, setReady] = React.useState(false);
-
   const translateY = useSharedValue(500);
 
   const handleClose = () => {
     actions?.onClose?.();
     hideModal();
   };
+
+  React.useEffect(() => {
+    if (!isVisible) return;
+    const subscription = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        handleClose();
+        return true;
+      },
+    );
+    return () => subscription.remove();
+  }, [isVisible]);
 
   React.useEffect(() => {
     if (isVisible) {
@@ -96,9 +108,9 @@ const ModalWrapper = ({
           <HeaderBar
             hideBackBtn={true}
             title={title!}
-            hasCancelBtn
+            hasRightButton
             className="!mt-1"
-            onCancel={handleClose}
+            onPressRightButton={handleClose}
           />
           {children}
           <View style={{ height: insets.bottom }} />

@@ -10,6 +10,7 @@ module.exports = {
           accent: {
             green: "var(--color-primary-ascent)",
             light: "var(--color-ascent)",
+            lighter: "var(--color-ascent-light)",
           },
           foreground: "var(--color-bg)",
           text: "var(--color-primary-text)",
@@ -17,6 +18,7 @@ module.exports = {
         secondary: {
           DEFAULT: "var(--color-secondary)",
           text: "var(--color-secondary-text)",
+          textlight: "var(--color-secondary-textlight)",
         },
         accent: "var(--color-accent)",
         border: {

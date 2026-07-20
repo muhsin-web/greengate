@@ -2,7 +2,7 @@
   "expo": {
     "name": "greengate",
     "slug": "greengate",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/app-logo/greengate-logo.png",
     "scheme": "greengate",
@@ -16,7 +16,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#000000",
         "foregroundImage": "./assets/images/app-logo/greengate-logo.png",
         "backgroundImage": "./assets/images/app-logo/greengate-logo.png",
         "monochromeImage": "./assets/images/app-logo/greengate-logo.png"
@@ -38,7 +38,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#ffffff",
           "image": "./assets/images/app-logo/greengate-logo.png",
           "imageWidth": 76
         }

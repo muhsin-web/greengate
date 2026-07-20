@@ -6,8 +6,11 @@ const Screen = () => {
   return (
     <ForgotPasswordScreen
       type="visitor"
-      onContinue={() =>
-        router.navigate({ pathname: "/auth/forgot-password/verify" })
+      onContinue={(e) =>
+        router.navigate({
+          pathname: "/auth/forgot-password/verify",
+          params: { email: e },
+        })
       }
     />
   );

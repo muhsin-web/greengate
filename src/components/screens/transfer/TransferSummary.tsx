@@ -34,7 +34,7 @@ const TransferSummary = ({ type }: { type: "user" | "bank" }) => {
         onPress={() => router.dismiss()}
       />
       <View className="bg-white rounded-t-[48px] p-4">
-        <HeaderBar title="Confirm transaction" />
+        <HeaderBar containerClass="z-10" title="Confirm transaction" />
 
         <View>
           <View className="bg-[#F6F6F6] rounded-full p-5 mt-6">

@@ -1,5 +1,6 @@
 import Button from "@/components/ui/Button";
 import { useModalStore } from "@/store/modal.store";
+import { deleteUserLocalSetting } from "@/store/user-local_settings.store";
 import { logoutUser } from "@/store/user.store";
 import { StyleSheet, Text, View } from "react-native";
 import ModalWrapper from "./modal-wrapper";
@@ -7,10 +8,12 @@ import ModalWrapper from "./modal-wrapper";
 const LogoutModal = () => {
   const actions = useModalStore((s) => s.actions);
   const hideModal = useModalStore((s) => s.hideModal);
+  const userId = "muhsin_12@";
 
   const logout = () => {
     hideModal();
     logoutUser();
+    deleteUserLocalSetting(userId);
   };
   return (
     <ModalWrapper title="Log out">

@@ -1,12 +1,22 @@
 import VerificationScreenCard from "@/components/shared/VerificationScreenCard";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { StyleSheet } from "react-native";
 
 const Screen = () => {
+  const { email } = useLocalSearchParams<{ email: string }>();
   return (
     <VerificationScreenCard
-      onProceed={() => router.navigate("/")}
+      onProceed={(e) =>
+        router.navigate({
+          pathname: "/auth/forgot-password/create-password",
+          params: {
+            email,
+            pin: e,
+          },
+        })
+      }
       title="Reset password"
+      email={email}
       type="RESET_PASSWORD"
     />
   );

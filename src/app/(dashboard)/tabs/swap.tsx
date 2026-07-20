@@ -1,11 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
+import SwapScreen from "@/components/screens/swap";
+import { StyleSheet } from "react-native";
 
 const Screen = () => {
-  return (
-    <View>
-      <Text>Screen</Text>
-    </View>
-  );
+  return <SwapScreen />;
 };
 
 export default Screen;

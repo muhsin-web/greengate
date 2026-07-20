@@ -1,6 +1,9 @@
 import { BackSpaceIcon } from "@/assets/svgs/BackSpaceIcon";
+import { ScanSmileyIcon } from "@/assets/svgs/ScanSmileyIcon";
 import { cn } from "@/libs/cn";
 import keys from "@/libs/data/keypad-keys.json";
+import { useUserLocalSettingStore } from "@/store/user-local_settings.store";
+import * as LocalAuthentication from "expo-local-authentication";
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 
 interface KeyPadProps {
@@ -10,6 +13,10 @@ interface KeyPadProps {
 
 const { width } = Dimensions.get("screen");
 const PinKeypad = ({ value, onChange }: KeyPadProps) => {
+  const userId = "muhsin_12@";
+  const users = useUserLocalSettingStore((s) => s.users);
+
+  const userBiometricSettings = users?.[userId];
   const onKeyPress = (key: string) => {
     if (value.length == 4) return;
     onChange(value + key);
@@ -19,7 +26,23 @@ const PinKeypad = ({ value, onChange }: KeyPadProps) => {
     onChange(value?.slice(0, -1));
   };
 
-  console.log(value);
+  const handleBiometric = async () => {
+    console.log(userBiometricSettings?.trxnPin);
+    try {
+      const result = await LocalAuthentication.authenticateAsync({
+        biometricsSecurityLevel: "strong",
+        disableDeviceFallback: true,
+        cancelLabel: "Cancel",
+        promptDescription:
+          "GreenGate will use your biometric for Login and completing Transaction",
+        promptMessage: "Biometric setup",
+      });
+      if (result?.success) {
+        onChange(userBiometricSettings?.trxnPin);
+      }
+    } catch (error) {}
+  };
+
   return (
     <View style={{ width: width * 0.75 }} className="self-center">
       <View className="mb-10 flex-row gap-5 justify-center">
@@ -38,8 +61,20 @@ const PinKeypad = ({ value, onChange }: KeyPadProps) => {
         {keys.map((row, index) => (
           <View key={index} className="flex-row">
             {row.map((key, idx) => {
-              if (key == "id")
+              if (key == "id") {
+                if (userBiometricSettings?.isBiometricEnabled) {
+                  return (
+                    <Pressable
+                      onPress={handleBiometric}
+                      key={"bio_user_key"}
+                      className="flex-1 justify-center items-center"
+                    >
+                      <ScanSmileyIcon size={40} />
+                    </Pressable>
+                  );
+                }
                 return <View className="flex-1" key={"unknown"} />;
+              }
               if (key == "back") {
                 return (
                   <Pressable

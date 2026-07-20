@@ -1,3 +1,4 @@
+import { useResendEmailCode, useVerifyEmail } from "@/api";
 import useCounter from "@/hooks/useCounter";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
@@ -14,18 +15,48 @@ interface VerificationScreenCardProps {
     | "RESET_PASSWORD"
     | "CREATE_ACCOUNT"
     | "AUTHENTICATED_RESET_PASSWORD";
-  onProceed?: () => void;
+  onProceed?: (pin?: string) => void;
+  email?: string;
 }
 
 const VerificationScreenCard = ({
   title,
   onProceed,
+  email,
+  type,
 }: VerificationScreenCardProps) => {
   const [otp, setOtp] = React.useState("");
   const { countdown, resetCounter } = useCounter({ count: 30 });
 
+  const veriy = useVerifyEmail();
+  const resend = useResendEmailCode();
+
   const handleContinue = () => {
-    onProceed!();
+    if (type == "RESET_PASSWORD") {
+      onProceed!(otp);
+      return;
+    }
+    veriy.mutate(
+      {
+        code: otp,
+      },
+      {
+        onSuccess(data, variables, onMutateResult, context) {
+          onProceed!();
+        },
+      },
+    );
+  };
+
+  const handleResend = () => {
+    resend.mutate(
+      {},
+      {
+        onSettled(data, error, variables, onMutateResult, context) {
+          resetCounter();
+        },
+      },
+    );
   };
 
   return (
@@ -40,15 +71,23 @@ const VerificationScreenCard = ({
         </View>
 
         <View>
-          <OtpInput length={5} value={otp} onChange={(e) => setOtp(e)} />
+          <OtpInput length={6} value={otp} onChange={(e) => setOtp(e)} />
         </View>
-        <CountDown className="mt-6" count={countdown} />
+        <CountDown
+          isLoading={resend.isPending}
+          onPress={handleResend}
+          className="mt-6"
+          count={countdown}
+        />
       </ScrollView>
+
       <Button
         title="Continue"
         onPress={handleContinue}
+        disabled={otp.length < 6}
         btnClass="!bg-secondary"
         textClass="!text-primary"
+        loading={veriy.isPending}
       />
     </SafeAreaView>
   );

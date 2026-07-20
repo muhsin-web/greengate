@@ -16,6 +16,7 @@ const Banks = () => {
 
       <FlatList
         data={BankList}
+        className="mt-4"
         ListHeaderComponent={header}
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => <View className="h-3" />}

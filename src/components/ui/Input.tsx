@@ -18,20 +18,36 @@ interface InputProps extends TextInputProps {
   success?: string;
   isPassword?: boolean;
   leading?: React.ReactNode;
+  trailing?: React.ReactNode;
+  className?: string;
+  containerClassName?: string;
 }
 
-const Input = ({ leading, label, isPassword, ...rest }: InputProps) => {
+const Input = ({
+  leading,
+  label,
+  info,
+  error,
+  success,
+  isPassword,
+  trailing,
+  className,
+  containerClassName,
+  ...rest
+}: InputProps) => {
   const [isvisible, setVisible] = React.useState(true);
   return (
-    <View>
+    <View className={cn(containerClassName)}>
       {label && <Text>Input</Text>}
       <View
         className={cn(
           "flex-row items-center border bg-primary-accent-light h-16 rounded-full px-4 py-1 border-border-stroke",
         )}
       >
+        {trailing && trailing}
         <TextInput
-          className="h-full bg-transparent flex-1 px-2 font-sans"
+          style={{ textAlignVertical: "center" }}
+          className="h-12 flex-1 px-2 font-sans text-secondary"
           secureTextEntry={isPassword && isvisible}
           placeholderTextColor={"#999999"}
           {...rest}
@@ -43,6 +59,12 @@ const Input = ({ leading, label, isPassword, ...rest }: InputProps) => {
           </Pressable>
         )}
       </View>
+      {error && <Text className="font-sans text-sm text-error">{error}</Text>}
+      {info && (
+        <Text className="font-sans text-sm text-secondary-textlight">
+          {info}
+        </Text>
+      )}
     </View>
   );
 };

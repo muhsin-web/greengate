@@ -6,7 +6,7 @@ const Screen = () => {
   return (
     <VerificationScreenCard
       type="CREATE_ACCOUNT"
-      onProceed={() => router.navigate("/auth/forgot-password")}
+      onProceed={() => router.navigate("/auth/pin-setup")}
       title="Enter verification code"
     />
   );

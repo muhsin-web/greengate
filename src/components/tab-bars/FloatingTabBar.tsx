@@ -1,4 +1,8 @@
 // app/(tabs)/_floating-tab-layout.tsx
+import { ArrowLeftRightIcon } from "@/assets/svgs/ArrowLeftRightIcon";
+import { CardHolderIcon } from "@/assets/svgs/CardHolderIcon";
+import { GearIcon } from "@/assets/svgs/GearIcon";
+import { HoueIcon } from "@/assets/svgs/HouseIcon";
 import { cn } from "@/libs/cn";
 import { BlurView } from "expo-blur";
 import { Tabs } from "expo-router";
@@ -14,8 +18,10 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
           ios: insets.bottom,
           android: insets.bottom + 10,
         }),
+        elevation: 10,
+        shadowColor: "#000000d2",
       }}
-      className="absolute bottom-6 overflow-hidden bg-transparent border border-[#0000001A] left-4 right-4 rounded-full"
+      className="absolute overflow-hidden bg-transparent border border-white left-4 right-4 rounded-full"
     >
       <BlurView
         intensity={Platform.select({ ios: 15, android: 120 })}
@@ -36,17 +42,17 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
             <Pressable
               key={route.key}
               onPress={() => navigation.navigate(route.name)}
-              style={{ flex: isFocused ? 1.3 : 1 }}
+              style={{ flex: isFocused ? 1.3 : 1, height: 60 }}
               className={cn(
-                "items-center justify-center flex-1 py-2 rounded-full h-14",
+                "items-center justify-center flex-1 py-2 rounded-full",
                 isFocused && "flex-[1.5] bg-[#00000014]",
               )}
             >
-              {/* {options.tabBarIcon?.({ focused: isFocused })} */}
+              {options.tabBarIcon?.({ focused: isFocused })}
               <Text
                 className={cn(
-                  "text-xs font-sans-medium mt-1",
-                  isFocused ? "text-[#2A2A2A]" : "text-gray-400",
+                  "text-xs font-sans-medium",
+                  isFocused ? "text-[#2A2A2A]" : "text-[#2A2A2A]",
                 )}
               >
                 {options.title}
@@ -69,28 +75,32 @@ export default function FloatingTabLayout() {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: require("@/assets/images/tabIcons/house.png"),
+          tabBarIcon: HoueIcon as any,
+          // tabBarIcon: require("@/assets/images/tabIcons/house.png"),
         }}
       />
       <Tabs.Screen
         name="wallet"
         options={{
           title: "Wallet",
-          tabBarIcon: require("@/assets/images/tabIcons/cardholder.png"),
+          tabBarIcon: CardHolderIcon as any,
+          // tabBarIcon: require("@/assets/images/tabIcons/cardholder.png"),
         }}
       />
       <Tabs.Screen
         name="swap"
         options={{
           title: "Swap",
-          tabBarIcon: require("@/assets/images/tabIcons/swap.png"),
+          tabBarIcon: ArrowLeftRightIcon as any,
+          // tabBarIcon: require("@/assets/images/tabIcons/swap.png"),
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
           title: "Settings",
-          tabBarIcon: require("@/assets/images/tabIcons/gear.png"),
+          tabBarIcon: GearIcon as any,
+          // tabBarIcon: require("@/assets/images/tabIcons/gear.png"),
         }}
       />
     </Tabs>

@@ -1,10 +1,10 @@
 import React from "react";
 import {
-   NativeSyntheticEvent,
-   StyleSheet,
-   TextInput,
-   TextInputKeyPressEventData,
-   View,
+  NativeSyntheticEvent,
+  StyleSheet,
+  TextInput,
+  TextInputKeyPressEventData,
+  View,
 } from "react-native";
 
 interface OtpInputProps {
@@ -48,9 +48,10 @@ const OtpInput = ({ value, onChange, length = 4 }: OtpInputProps) => {
               placeholder="0"
               keyboardType="numeric"
               maxLength={1}
+              placeholderTextColor={"#999999"}
               onChangeText={(text) => handleChangeText(text, idx)}
               onKeyPress={(e) => handleKeyPress(e, idx)}
-              className="flex-1 text-center text-secondary border bg-primary-accent-light text-2xl font-sans-medium border-border-stroke rounded-full aspect-square"
+              className="flex-1 text-secondary text-center border bg-primary-accent-light text-2xl font-sans-medium border-border-stroke rounded-full aspect-square"
             />
           );
         })}
