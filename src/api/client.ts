@@ -23,6 +23,7 @@ const REFRESH_TOKEN_KEY = "greengate_refresh_token";
 
 export const tokenStorage = {
   getAccessToken: () => SecureStore.getItemAsync(ACCESS_TOKEN_KEY),
+  getAccessTokenSync: () => SecureStore.getItem(ACCESS_TOKEN_KEY),
   getRefreshToken: () => SecureStore.getItemAsync(REFRESH_TOKEN_KEY),
 
   async setTokens(tokens: AuthTokens): Promise<void> {
@@ -93,7 +94,6 @@ function subscribeTokenRefresh(cb: (token: string | null) => void) {
 }
 
 function onRefreshed(token: string | null) {
-  console.log(token);
   refreshQueue.forEach((cb) => cb(token));
   refreshQueue = [];
 }
@@ -137,18 +137,18 @@ apiClient.interceptors.response.use(
         if (!refreshToken) throw error;
 
         // Bare axios call (not apiClient) to avoid recursive interceptor loop
-        const { data } = await axios.post<AuthTokens>(
+        const { data } = await axios.post<{ data: AuthTokens }>(
           `${BASE_URL}/api/v1/auth/refresh`,
           { refreshToken },
         );
 
-        await tokenStorage.setTokens(data);
-        onRefreshed(data?.accessToken);
+        await tokenStorage.setTokens(data?.data);
+        onRefreshed(data?.data?.accessToken);
         isRefreshing = false;
 
         originalRequest.headers.set(
           "Authorization",
-          `Bearer ${data.accessToken}`,
+          `Bearer ${data.data?.accessToken}`,
         );
         return apiClient(originalRequest);
       } catch (refreshError) {

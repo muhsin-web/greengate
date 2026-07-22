@@ -1,17 +1,23 @@
+import { FxRate } from "@/api";
 import { ArrowDownIcon } from "@/assets/svgs/ArrowDownIcon";
 import { EyeOffIcon } from "@/assets/svgs/EyeCloseIcon";
 import { FileTextIcon } from "@/assets/svgs/FileTextIcon";
 import Button from "@/components/ui/Button";
 import HeaderBar from "@/components/ui/HeaderBar";
 import { useModal } from "@/hooks/useModal";
+import { formatCurrency, getCurrencyIcon } from "@/utils/currency";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { WalletType } from ".";
 
-const WalletCoinDetails = ({ coin }: { coin: WalletType }) => {
+interface CoinDetailType extends FxRate {
+  icon: any;
+  isCrypto: boolean;
+}
+const WalletCoinDetails = ({ coin }: { coin: CoinDetailType }) => {
   const { showModal } = useModal();
+  const bal = "317628.34";
   return (
     <SafeAreaView className="flex-1 bg-primary-foreground px-4">
       <HeaderBar
@@ -19,10 +25,10 @@ const WalletCoinDetails = ({ coin }: { coin: WalletType }) => {
         hasRightButton
         onPressRightButton={() =>
           showModal("statement_modal", {
-            title: `${coin?.title} Wallet statement`,
+            title: `${coin?.base_name} Wallet statement`,
           })
         }
-        title={coin.title + " wallet"}
+        title={coin?.base_name + " wallet"}
       />
 
       <ScrollView showsVerticalScrollIndicator={false} className="mt-3">
@@ -37,10 +43,14 @@ const WalletCoinDetails = ({ coin }: { coin: WalletType }) => {
               <EyeOffIcon />
             </View>
             <Text className="font-sans-medium text-5xl text-secondary">
-              $350.
-              <Text className="text-[#8A8B8D]">78</Text>
+              {formatCurrency(Number(bal), coin?.base_symbol).split(".")[0]}.
+              <Text className="text-[#8A8B8D]">
+                {formatCurrency(Number(bal), coin?.base_symbol).split(".")[1]}
+              </Text>
             </Text>
-            <Text className="font-sans text-primary-text">≈ ₦567,000.00</Text>
+            <Text className="font-sans text-primary-text">
+              ≈ {formatCurrency(Number(bal) * Number(coin?.sell_rate ?? 0))}
+            </Text>
           </View>
 
           <View className="flex-row items-center gap-3 mt-10 mb-6">
@@ -50,7 +60,7 @@ const WalletCoinDetails = ({ coin }: { coin: WalletType }) => {
               btnClass="!bg-secondary flex-1"
               onPress={() =>
                 router.navigate({
-                  pathname: coin.isCrypto
+                  pathname: coin?.isCrypto
                     ? "/wallets/trade-crypto"
                     : "/wallets/trade-fiat",
                   params: {
@@ -65,7 +75,7 @@ const WalletCoinDetails = ({ coin }: { coin: WalletType }) => {
               addBottomGap={false}
               onPress={() =>
                 router.navigate({
-                  pathname: coin.isCrypto
+                  pathname: coin?.isCrypto
                     ? "/wallets/trade-crypto/receive-crypto"
                     : "/wallets/trade-fiat/sell-fiat",
                   params: {
@@ -91,7 +101,9 @@ const WalletCoinDetails = ({ coin }: { coin: WalletType }) => {
 
           <View className="bg-[#F3F3F3] rounded-full py-1.5 px-3 justify-center items-center self-center">
             <Text className="font-sans-medium text-[#393939] text-sm">
-              Buy ₦1,650 · Sell ₦1,620 per $1
+              Buy {formatCurrency(Number(coin?.buy_rate))} · Sell{" "}
+              {formatCurrency(Number(coin.sell_rate))} per{" "}
+              {getCurrencyIcon(coin?.base_symbol)}1
             </Text>
           </View>
         </View>

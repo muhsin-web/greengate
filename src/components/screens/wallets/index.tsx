@@ -1,7 +1,8 @@
-import { useWallets } from "@/api";
+import { useFxRates } from "@/api";
 import BottomSpacer from "@/components/shared/BottomSpacer";
 import HeaderBar from "@/components/ui/HeaderBar";
 import { cn } from "@/libs/cn";
+import { formatCurrency, getCurrencyIcon } from "@/utils/currency";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import React from "react";
@@ -41,6 +42,12 @@ const tabs = {
       amount: "€0.00",
       icon: require("@/assets/images/country/euro.png"),
     },
+    {
+      title: "Canadian Dollar",
+      code: "CAD",
+      amount: "€0.00",
+      icon: require("@/assets/images/country/cad.jpg"),
+    },
   ],
   crypto: [
     {
@@ -71,10 +78,25 @@ const tabs = {
 };
 const WalletsScreen = () => {
   const [activeTab, setActiveTab] = React.useState<"crypto" | "fiat">("fiat");
-  const { data, error } = useWallets();
+  const { data: fxlist } = useFxRates();
 
-  console.log(JSON.stringify(data, null, 2), error);
-
+  const fiatList = [
+    {
+      rate_id: "ngn_nigeria_naira",
+      base_id: "019f17d5-e191-73dd-af77-f05e63504ef1",
+      base_symbol: "NGN",
+      base_name: "Nigerian Naira",
+      base_decimals: 2,
+      quote_id: "019f17d5-e191-713d-b117-a6858c2cc61c",
+      quote_symbol: "NGN",
+      buy_rate: "1",
+      sell_rate: "1",
+      mid_rate: "1",
+      captured_at: new Date(),
+      source: "seed",
+    },
+    ...[...(fxlist?.data || [])],
+  ];
   const tablIst = Object.keys(tabs);
 
   return (
@@ -83,7 +105,7 @@ const WalletsScreen = () => {
       <ScrollView showsVerticalScrollIndicator={false} className="mt-4">
         <View>
           <View className="self-center flex-row items-center bg-primary-accent-light rounded-full p-1.5 w-2/3">
-            {tablIst.map((tab, index) => (
+            {tablIst?.map((tab: any, index) => (
               <Pressable
                 className={cn(
                   "py-3 flex-1",
@@ -100,7 +122,67 @@ const WalletsScreen = () => {
           </View>
 
           <View className="gap-1 mt-6">
-            {tabs?.[activeTab]?.map((item, index) => (
+            <>
+              {activeTab == "fiat" && (
+                <>
+                  {fiatList?.map((item, index) => {
+                    const foundIcon = tabs[activeTab]?.find(
+                      (d) =>
+                        d.code?.toLowerCase() ==
+                        item?.base_symbol?.toLowerCase(),
+                    )?.icon;
+                    return (
+                      <Pressable
+                        onPress={() =>
+                          router.navigate({
+                            pathname: "/(dashboard)/wallets",
+                            params: {
+                              details: JSON.stringify({
+                                ...item,
+                                icon: foundIcon,
+                                isCrypto: false,
+                              }),
+                            },
+                          })
+                        }
+                        className="bg-[#F6F6F6] p-4 rounded-full gap-2 flex-row"
+                        key={index}
+                      >
+                        {foundIcon && (
+                          <Image
+                            source={foundIcon}
+                            style={{ width: 40, height: 40, borderRadius: 20 }}
+                          />
+                        )}
+                        <View className="flex-1 flex-row items-center">
+                          <View className="flex-1">
+                            <Text className="text-sm font-sans-medium text-[#393939]">
+                              {item?.base_name}
+                            </Text>
+                            <Text className="font-sans-medium text-[#8A8B8D] text-xs">
+                              {item?.base_symbol}
+                            </Text>
+                          </View>
+                          <View>
+                            <Text className="font-sans-medium text-right text-[#393939]">
+                              {formatCurrency(0, item?.base_symbol)}
+                            </Text>
+                            <Text className="text-sm font-sans text-secondary-text text-right">
+                              {formatCurrency(
+                                Number(item?.buy_rate),
+                                item?.base_symbol,
+                              )}
+                              /{getCurrencyIcon(item?.base_symbol)}
+                            </Text>
+                          </View>
+                        </View>
+                      </Pressable>
+                    );
+                  })}
+                </>
+              )}
+            </>
+            {/* {tabs?.[activeTab]?.map((item, index) => (
               <Pressable
                 onPress={() =>
                   router.navigate({
@@ -138,7 +220,7 @@ const WalletsScreen = () => {
                   </View>
                 </View>
               </Pressable>
-            ))}
+            ))} */}
           </View>
         </View>
         <BottomSpacer />

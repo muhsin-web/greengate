@@ -1,5 +1,6 @@
 import "@/libs/cssInterop";
 import { useUserStore } from "@/store/user.store";
+import { isTokenValid } from "@/utils/isTokenValid";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -35,10 +36,10 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <Stack screenOptions={{ headerShown: false, gestureEnabled: false }}>
-          <Stack.Protected guard={isAuthenticated}>
+          <Stack.Protected guard={isAuthenticated && isTokenValid()}>
             <Stack.Screen name="(dashboard)" />
           </Stack.Protected>
-          <Stack.Protected guard={!isAuthenticated}>
+          <Stack.Protected guard={!isAuthenticated || !isTokenValid()}>
             <Stack.Screen name="auth" />
           </Stack.Protected>
         </Stack>

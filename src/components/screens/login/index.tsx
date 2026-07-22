@@ -15,8 +15,6 @@ const LoginScreen = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  console.log(user.data);
-
   const handleLogin = () => {
     login.mutate(
       {
