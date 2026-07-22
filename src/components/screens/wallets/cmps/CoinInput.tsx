@@ -22,16 +22,13 @@ const CoinInput = ({
   const [selection, setSelection] = React.useState({ start: 0, end: 0 });
   const inputRef = React.useRef<TextInput>(null);
 
-  const handleFocus = () => {
-    const position = value.length;
-
-    setSelection({
-      start: position,
-      end: position,
-    });
-  };
   const amounts = [50, 100, 250, 500];
   const percents = [0.25, 0.5, 1];
+
+  React.useEffect(() => {
+    const position = value.length;
+    setSelection({ start: position, end: position });
+  }, [value]);
 
   return (
     <View className="items-center gap-6">
@@ -54,9 +51,9 @@ const CoinInput = ({
           className="font-sans-semibold px-2 top-0 h-full text-secondary opacity-0 bg-red-500 absolute z-10 text-5xl text-center self-center"
           value={value}
           autoFocus
-          onFocus={handleFocus}
           selection={selection}
           maxLength={8}
+          onSelectionChange={(e) => setSelection(e.nativeEvent.selection)}
           onChangeText={(e) => onValueChange(formatAmountInput(e))}
           keyboardType="number-pad"
           inputMode="numeric"

@@ -33,7 +33,7 @@ export default function RootLayout() {
   });
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider key={isAuthenticated ? "auth" : "guest"}>
       <QueryClientProvider client={queryClient}>
         <Stack screenOptions={{ headerShown: false, gestureEnabled: false }}>
           <Stack.Protected guard={isAuthenticated && isTokenValid()}>

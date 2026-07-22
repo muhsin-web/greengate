@@ -45,7 +45,7 @@ export interface FxPayoutRequest {
   bankName: string;
   accountNumber: string;
   bankCountry: string;
-  accountName: string;
+  beneficiaryName: string;
   routingType: string;
   swiftCode: string;
   iban: string;

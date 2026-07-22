@@ -67,6 +67,7 @@ const BuyFiatScreen = ({ coin }: { coin: WalletType }) => {
           step.
         </Text>
         <Button
+          disabled={!amount}
           onPress={() =>
             router.navigate({
               pathname: "/wallets/trade-fiat/receipient",

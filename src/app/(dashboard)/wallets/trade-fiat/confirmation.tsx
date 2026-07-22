@@ -1,7 +1,9 @@
-import { WalletType } from "@/components/screens/wallets";
+import { FxRate, useRequestFxPayout } from "@/api";
 import Button from "@/components/ui/Button";
 import HeaderBar from "@/components/ui/HeaderBar";
+import { useModal } from "@/hooks/useModal";
 import { formatCurrency } from "@/utils/currency";
+import { BuyFiatFormValues } from "@/utils/validation/buyFiatSchema";
 import { BlurView } from "expo-blur";
 import { router, useLocalSearchParams } from "expo-router";
 import {
@@ -15,15 +17,15 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-interface TrxnDetails extends WalletType {
+interface PayloadType extends BuyFiatFormValues, FxRate {}
+interface TrxnDetails extends PayloadType {
   amount: string;
-  accountNumber: string;
-  accountName: string;
-  bankName: string;
 }
 
 const { height } = Dimensions.get("screen");
 const Screen = () => {
+  const { showModal } = useModal();
+  const makePayout = useRequestFxPayout();
   const { trxnDetails: details } = useLocalSearchParams<{
     trxnDetails: string;
   }>();
@@ -31,7 +33,56 @@ const Screen = () => {
   const trxnDetails: TrxnDetails = JSON.parse(details);
 
   const amt = Number(trxnDetails?.amount);
-  const conversion = Number(amt) * 1200.12;
+  const conversion =
+    Number(trxnDetails?.amount) * Number(trxnDetails?.buy_rate);
+
+  console.log(trxnDetails?.base_symbol);
+
+  const handleContinue = (e: string) => {
+    const {
+      accountName,
+      swiftCode,
+      base_symbol: symbol,
+      amount,
+      bankAddress,
+      accountNumber,
+      bankCountry,
+      bankName,
+      iban,
+      narration,
+      routingNumber,
+      routingType,
+      sortCode,
+    } = trxnDetails;
+    makePayout.mutate(
+      {
+        beneficiaryName: accountName,
+        accountNumber,
+        amount,
+        bankAddress,
+        bankCountry: "US",
+        bankName,
+        iban,
+        narration,
+        routingType: "swift",
+        routingNumber,
+        sortCode,
+        swiftCode,
+        pin: e,
+        symbol,
+      },
+      {
+        onSuccess(data, variables, onMutateResult, context) {
+          router.navigate({
+            pathname: "/wallets/trade-fiat/success",
+            params: {
+              details: JSON.stringify(trxnDetails),
+            },
+          });
+        },
+      },
+    );
+  };
   return (
     <BlurView
       tint="dark"
@@ -54,9 +105,9 @@ const Screen = () => {
                 You buy
               </Text>
               <Text className="font-sans-medium text-5xl text-secondary">
-                {formatCurrency(amt)?.split(".")[0]}.
+                {formatCurrency(amt, trxnDetails?.base_symbol)?.split(".")[0]}.
                 <Text className="text-[#8A8B8D]">
-                  {formatCurrency(amt)?.split(".")[1]}
+                  {formatCurrency(amt, trxnDetails?.base_symbol)?.split(".")[1]}
                 </Text>
               </Text>
             </View>
@@ -68,7 +119,7 @@ const Screen = () => {
               <Text className="font-sans-medium text-5xl text-secondary">
                 {formatCurrency(conversion, "NGN")?.split(".")[0]}.
                 <Text className="text-[#8A8B8D]">
-                  {formatCurrency(conversion, "ngn")?.split(".")[1]}
+                  {formatCurrency(conversion, "NGN")?.split(".")[1]}
                 </Text>
               </Text>
             </View>
@@ -93,15 +144,23 @@ const Screen = () => {
 
           <Button
             onPress={() =>
-              router.navigate({
-                pathname: "/wallets/trade-fiat/success",
-                params: {
-                  details: JSON.stringify(trxnDetails),
+              showModal(
+                "trxn_pin_modal",
+                {
+                  title: "",
+                  desc: ``,
                 },
-              })
+                {
+                  onConfirm(e) {
+                    handleContinue(e);
+                  },
+                },
+              )
             }
             title="Confirm & pay"
             type="secondary"
+            loading={makePayout.isPending}
+            disabled={makePayout.isPending}
           />
         </ScrollView>
       </View>

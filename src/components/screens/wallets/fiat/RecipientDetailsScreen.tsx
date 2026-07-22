@@ -47,7 +47,7 @@ const RecipientDetailsScreen = ({
     defaultValues,
   });
 
-  console.log(trxnDetails);
+  console.log(errors, "error", isValid);
 
   const makePayout = useRequestFxPayout();
   const { showModal } = useModal();
@@ -104,6 +104,20 @@ const RecipientDetailsScreen = ({
           <Controller
             control={control}
             shouldUnregister
+            name="accountNumber"
+            render={({ field: { value, onChange } }) => (
+              <Input
+                value={value}
+                onChangeText={onChange}
+                placeholder="Account number"
+                error={errors?.accountNumber?.message}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            shouldUnregister
             name="bankCountry"
             render={({ field: { value, onChange } }) => (
               <Input
@@ -140,7 +154,7 @@ const RecipientDetailsScreen = ({
                 value={value}
                 onChangeText={onChange}
                 placeholder="Swift code"
-                error={errors?.sortCode?.message}
+                error={errors?.swiftCode?.message}
               />
             )}
           />
